@@ -12,10 +12,10 @@ import android.app.AlarmManager;
 import java.util.Calendar;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    Button medButton, cancelButton;
+    Button medButton, cancelButton, goToNewMedButton;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
     Intent intent;
@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button medButton = (Button) findViewById(R.id.medButton);
         Button cancelButton = (Button) findViewById(R.id.cancelButton);
+        medButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
     }
 
     public void startAlert(View v){
@@ -33,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
         pendingIntent = PendingIntent.getBroadcast(
                 this.getApplicationContext(), 280192, intent, PendingIntent.FLAG_CANCEL_CURRENT);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), 10000
-                , pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, 1000, pendingIntent);
     }
 
+    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.medButton) {
             startAlert(v);
@@ -49,6 +51,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (alarmManager != null) {
+            alarmManager.cancel(pendingIntent);
+        }
+
+
     }
 
 
