@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MedicineReminder</string>
+
+    <string-array name="times">
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Monthly</item>
+    </string-array>
 </resources>

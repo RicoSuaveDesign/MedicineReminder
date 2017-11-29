@@ -12,7 +12,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Toast.makeText(context, "Take your medicine my dude",
+        Toast.makeText(context, "Take your medicine",
                 Toast.LENGTH_LONG).show();
 
         Vibrator vibrator = (Vibrator) context

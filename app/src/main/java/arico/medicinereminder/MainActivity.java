@@ -24,10 +24,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button medButton = (Button) findViewById(R.id.medButton);
-        Button cancelButton = (Button) findViewById(R.id.cancelButton);
+        medButton = (Button) findViewById(R.id.medButton);
+        cancelButton = (Button) findViewById(R.id.cancelButton);
+        goToNewMedButton = (Button) findViewById(R.id.goToNewMed);
         medButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+        goToNewMedButton.setOnClickListener(this);
     }
 
     public void startAlert(View v){
@@ -42,7 +44,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if (v.getId() == R.id.medButton) {
             startAlert(v);
-        } else {
+        }
+        else if(v.getId() == R.id.goToNewMed){
+            launchActivity();
+        }
+        else {
             if (alarmManager != null){
 
                 alarmManager.cancel(pendingIntent);
@@ -51,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
         }
+    }
+
+    private void launchActivity() {
+
+        Intent intent = new Intent(this, NewMedicineActivity.class);
+        startActivity(intent);
     }
 
     @Override
