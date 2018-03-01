@@ -21,7 +21,14 @@
         <activity android:name=".NewMedicineActivity">
 
         </activity>
+
+        <activity
+            android:name=".MedListActivity"
+            android:label="Med List" >
+        </activity>
         <receiver android:name=".AlarmBroadcastReceiver" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
