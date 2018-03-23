@@ -1,10 +1,16 @@
 package arico.medicinereminder;
 
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import java.net.URLConnection; // time to use something not deprecated
+import java.net.HttpURLConnection; // time to use something not deprecated
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -13,6 +19,7 @@ import com.google.gson.GsonBuilder;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,6 +32,12 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by starb on 1/29/2018.
  */
@@ -32,23 +45,38 @@ import android.widget.TextView;
 public class MedListActivity extends ListActivity {
     // Progress Dialog
     private ProgressDialog pDialog;
+    
 
-    // Creating JSON Parser object
-   // JSONParser jParser = new JSONParser();
 
-    ArrayList<HashMap<String, String>> productsList;
+    Context context;
 
-    // url to get all products list
-    private static String url_all_products = "https://api.androidhive.info/android_connect/get_all_products.php";
+    // honestly? let's just try access the actual webpage
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-    // JSON Node names
-    private static final String TAG_SUCCESS = "success";
-    private static final String TAG_PRODUCTS = "products";
-    private static final String TAG_PID = "pid";
-    private static final String TAG_NAME = "name";
+        MedInterface medfetch = MedClient.getClient().create(MedInterface.class);
 
-    // products JSONArray
-    JSONArray products = null;
+        Call<MedResponse> call = medfetch.getAllMedicines(1);
+        call.enqueue(new Callback<MedResponse>() {
+            @Override
+            public void onResponse(Call<MedResponse>call, Response<MedResponse> response) {
 
+                List<Medicine> medicines = response.body().getResults();
+                Log.d(TAG, "Number of medicines received: " + medicines.size());
+                Log.d(TAG, "med name: " + medicines.get(0).getMedName());
+
+            }
+
+            @Override
+            public void onFailure(Call<MedResponse>call, Throwable t) {
+                // Log error here since request failed
+                Log.e(TAG, t.toString());
+            }
+        });
+
+
+
+    }
 
 }

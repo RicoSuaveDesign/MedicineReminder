@@ -15,7 +15,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    Button medButton, cancelButton, goToNewMedButton;
+    Button medButton, cancelButton, goToNewMedButton, viewMedsButton;
     PendingIntent pendingIntent;
     AlarmManager alarmManager;
     Intent intent;
@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         medButton = (Button) findViewById(R.id.medButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
         goToNewMedButton = (Button) findViewById(R.id.goToNewMed);
+        viewMedsButton = (Button) findViewById(R.id.viewMeds);
         medButton.setOnClickListener(this);
+        viewMedsButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         goToNewMedButton.setOnClickListener(this);
     }
@@ -46,7 +48,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startAlert(v);
         }
         else if(v.getId() == R.id.goToNewMed){
-            launchActivity();
+            launchNewMedsActivity();
+        }
+        else if(v.getId() == R.id.viewMeds){
+            launchViewMedsActivity();
         }
         else {
             if (alarmManager != null){
@@ -59,10 +64,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void launchActivity() {
+    private void launchNewMedsActivity() {
 
         Intent intent = new Intent(this, NewMedicineActivity.class);
         startActivity(intent);
+    }
+
+    private void launchViewMedsActivity() {
+
+        Intent intent = new Intent(this, MedListActivity.class);
+        startActivity(intent);
+
     }
 
     @Override

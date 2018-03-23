@@ -140,9 +140,9 @@ public class NewMedicineActivity extends AppCompatActivity
         System.out.println(month);
         System.out.println(year);
 
-        GregorianCalendar date = new GregorianCalendar();
+       /* GregorianCalendar date = new GregorianCalendar();
         date.set(year, month, day);
-        newMed.setExpirationDate(date);
+        newMed.setExpirationDate(date);*/
 
         // fills out exp date box so user sees their input
         expiration.setText((month + 1) + "/" + day + "/" + year);
