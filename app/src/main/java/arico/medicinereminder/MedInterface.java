@@ -4,7 +4,10 @@ package arico.medicinereminder;
  * Created by starb on 3/21/2018.
  */
 import retrofit2.Call;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface MedInterface {
@@ -14,5 +17,17 @@ public interface MedInterface {
 
     @GET("get_medicine_details.php")
     Call<Medicine> getMedicineDetails(@Query("med_id") int id);
+
+    @POST("create_medicine.php")
+    @FormUrlEncoded
+    Call<Medicine> postMedicine(@Field("uid") int user_id,
+                                @Field ("name") String med_name,
+                                @Field ("medFreqPerTime") int medFreqPerTime,
+                                @Field("medFreqInterval") long medFreqInterval,
+                                @Field ("dosage") float dosage,
+                                @Field ("unit") String unit,
+                                @Field ("expiration") String expiration,
+                                @Field ("dosesLeft") int dosesLeft);
+
 
 }
