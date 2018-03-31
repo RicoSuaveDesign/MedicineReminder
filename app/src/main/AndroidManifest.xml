@@ -26,6 +26,10 @@
             android:name=".MedListActivity"
             android:label="My Medicines" >
         </activity>
+
+        <activity
+            android:name=".ViewSingleMedActivity">
+        </activity>
         <receiver android:name=".AlarmBroadcastReceiver" />
     </application>
 

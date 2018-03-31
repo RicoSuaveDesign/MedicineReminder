@@ -24,7 +24,7 @@ public class Medicine {
 
     @SerializedName("checkTime")
     @Expose
-    private ArrayList<GregorianCalendar> checkTime; // when should the app check if your med has been taken?
+    private ArrayList<String> checkTime; // when should the app check if your med has been taken?
 
     @SerializedName("medFreqPerTime")
     @Expose
@@ -48,9 +48,9 @@ public class Medicine {
     //private GregorianCalendar expirationDate;
     private String expirationDate;
 
-    @SerializedName("lastTimeTaken")
+    /*@SerializedName("lastTimeTaken")
     @Expose
-    private GregorianCalendar lastTimeTaken; // for our purposes we only need the last time the med was taken
+    private GregorianCalendar lastTimeTaken; // for our purposes we only need the last time the med was taken*/
 
     @SerializedName("timesTaken")
     @Expose
@@ -75,7 +75,7 @@ public class Medicine {
         dosageUnit = new String("");
         //expirationDate = new GregorianCalendar();
         expirationDate = new String("");
-        lastTimeTaken = new GregorianCalendar();
+        //lastTimeTaken = new GregorianCalendar();
         timesTaken = 0;
         taken = false;
         dosesLeft = 0;
@@ -94,15 +94,15 @@ public class Medicine {
         medName = name;
     }
 
-    public ArrayList<GregorianCalendar> getCheckTime() // returns all check times
+    public ArrayList<String> getCheckTime() // returns all check times
     {
         return checkTime;
     }
-    public GregorianCalendar getCheckTime(int index) // get a time based on index
+    public String getCheckTime(int index) // get a time based on index
     {
         return checkTime.get(index);
     }
-    public GregorianCalendar getCheckTime(GregorianCalendar time) // get a time based on a gregcalendar. Returns null if does not exist
+    public String getCheckTime(String time) // get a time based on a gregcalendar. Returns null if does not exist
     {
         int index = checkTime.indexOf(time);
         if(index == -1)
@@ -111,11 +111,11 @@ public class Medicine {
         }
         return checkTime.get(index);
     }
-    public void addCheckTime(GregorianCalendar time)
+    public void addCheckTime(String time)
     {
         checkTime.add(time);
     }
-    public void removeCheckTime(GregorianCalendar time) // removes time if it exists
+    public void removeCheckTime(String time) // removes time if it exists
     {
         checkTime.remove(time);
     }
@@ -175,14 +175,14 @@ public class Medicine {
 */
    public String getExpirationDate() { return expirationDate;}
     public void setExpirationDate(String exp) {expirationDate = exp;}
-    public GregorianCalendar getLastTimeTaken()
+  /*  public GregorianCalendar getLastTimeTaken()
     {
         return lastTimeTaken;
     }
     public void setLastTimeTaken(GregorianCalendar time)
     {
         lastTimeTaken = time;
-    }
+    }*/
 
     public int getTimesTaken()
     {

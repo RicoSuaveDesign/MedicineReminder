@@ -37,7 +37,7 @@ public class NewMedicineActivity extends AppCompatActivity
             implements TimePickerFragment.onTimeSelectedListener, DatePickerFragment.onDateSelectedListener{
 
     private Medicine newMed; // the medicine we will be entering into the database
-    private GregorianCalendar remindTime; // temp fix, does not work for multiple doses in a period
+    private String remindTime; // temp fix, does not work for multiple doses in a period
 
     EditText medName;
     EditText whenRemind;
@@ -63,7 +63,7 @@ public class NewMedicineActivity extends AppCompatActivity
         medfetch = MedClient.getClient().create(MedInterface.class);
 
         newMed = new Medicine();
-        remindTime = new GregorianCalendar();
+        remindTime = new String("");
 
         medName = (EditText) findViewById(R.id.medNameText);
         whenRemind = (EditText) findViewById(R.id.timeText);
@@ -119,22 +119,46 @@ public class NewMedicineActivity extends AppCompatActivity
                 newMed.setDosesLeft(Integer.parseInt(howManyDoses.getText().toString()));
                 newMed.addCheckTime(remindTime);
 
-
-               /* int freq = newMed.getMedFreqPerTime(); // Save a few function calls
+                // We're going to generate times based on the intervals, and user can later edit them.
+                int freq = newMed.getMedFreqPerTime(); // Save a few function calls
                 if(freq > 1)
                 {
-                    long realInterval = newMed.getMedFreqInterval() / newMed.getMedFreqPerTime();
-                    for(int i = 0; i<freq; i++)
-                    {
+                    // we need to get the initial hour and minute first
+                    GregorianCalendar time = (GregorianCalendar) Calendar.getInstance();
+                    System.out.println(time.getTimeInMillis());
+                    String wordTime = newMed.getCheckTime(0);
+                    int hour = Integer.parseInt(wordTime.substring(0,1));
+                    int minute = Integer.parseInt(wordTime.substring(3,4));
 
+                    // now we're matching data types, also figuring out the interval between check times.
+                    time.set(time.get(Calendar.YEAR), time.get(Calendar.MONTH), time.get(Calendar.DATE), hour, minute);
+                    long realInterval = newMed.getMedFreqInterval() / newMed.getMedFreqPerTime();
+                    long timeinit = time.getTimeInMillis();
+                    int nextHour;
+                    int nextMinute;
+
+                    for(int i = 1; i<freq; i++)
+                    {
+                        // take times to ms and add them, then put into medicine to go to db.
+                        System.out.println(timeinit);
+                        timeinit += realInterval;
+                        System.out.println(timeinit);
+                        time.setTimeInMillis(timeinit);
+                        nextHour = time.get(Calendar.HOUR_OF_DAY);
+                        nextMinute = time.get(Calendar.MINUTE);
+                        System.out.println(makeDBTime(nextHour, nextMinute));
+
+                        newMed.addCheckTime(makeDBTime(nextHour, nextMinute));
                     }
-                }*/
+                }
 
                 if(!TextUtils.isEmpty(medName.getText()) && !TextUtils.isEmpty(medFreqNum.getText())
                         && !TextUtils.isEmpty(dosage.getText()) && !TextUtils.isEmpty(doseUnit.getText()) ) {
 
-                    Call<Medicine> call = medfetch.postMedicine(1, newMed.getMedName(), newMed.getMedFreqPerTime(), newMed.getMedFreqInterval(), newMed.getDosage(),
-                            newMed.getDosageUnit(), newMed.getExpirationDate(), 30);
+                    /*Call<Medicine> call = medfetch.postMedicine(1, newMed.getMedName(), newMed.getMedFreqPerTime(), newMed.getMedFreqInterval(), newMed.getDosage(),
+                            newMed.getDosageUnit(), newMed.getExpirationDate(), 30, newMed.getCheckTime());*/
+                    newMed.setUser_id(1);
+                    Call<Medicine> call = medfetch.postMedicine(newMed);
 
                     call.enqueue(new Callback<Medicine>() {
                         @Override
@@ -168,9 +192,8 @@ public class NewMedicineActivity extends AppCompatActivity
         System.out.println(hour);
         System.out.println(minute);
 
-        GregorianCalendar time = new GregorianCalendar();
-        time.set(Calendar.YEAR, Calendar.MONTH, Calendar.DATE, hour, minute);
-        remindTime = time;
+
+        remindTime = makeDBTime(hour, minute);
 
         // fills out the time box so user feels that their time went through
         if(hour > 12) {
@@ -201,6 +224,28 @@ public class NewMedicineActivity extends AppCompatActivity
 
         // fills out exp date box so user sees their input
         expiration.setText((month + 1) + "/" + day + "/" + year);
+    }
+
+    private String makeDBTime(int hour, int minute)
+    {
+        String retVal = new String("");
+        if(hour < 10)
+        {
+            retVal += "0";
+        }
+        retVal += Integer.toString(hour);
+
+        retVal += ":";
+        if(minute < 10)
+        {
+            retVal += "0"; // The db can handle no leading 0s, but java needs consistency
+
+        }
+        retVal += Integer.toString(minute);
+
+        retVal += ":0";
+
+        return retVal;
     }
 
 

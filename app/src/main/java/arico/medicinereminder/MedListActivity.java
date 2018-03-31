@@ -1,41 +1,13 @@
 package arico.medicinereminder;
 
-import java.io.BufferedInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 
-import java.net.HttpURLConnection; // time to use something not deprecated
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import android.app.Activity;
-import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.SimpleAdapter;
-import android.widget.TextView;
 
 
 import retrofit2.Call;
