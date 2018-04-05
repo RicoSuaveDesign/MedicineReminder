@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MedClient {
 
-    public static final String BASE_URL = "http://10.0.2.2/thesistest/";
+    public static final String BASE_URL = "http://10.212.81.49/med_reminder/";
     private static Retrofit retrofit = null;
 
 

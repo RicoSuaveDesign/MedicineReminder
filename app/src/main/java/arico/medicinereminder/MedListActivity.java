@@ -58,6 +58,7 @@ public class MedListActivity extends Activity {
                 adapter = new RecyclerAdapter(medicines);
                 recyclerView.setAdapter(adapter);
 
+
             }
 
             @Override

@@ -22,6 +22,14 @@ public class Medicine {
     @Expose
     private String medName;
 
+    @SerializedName("tag_id")
+    @Expose
+    private int tag_id; // how did I not have this as part of medicine sooner????
+
+    @SerializedName("med_desc")
+    @Expose
+    private String med_desc;
+
     @SerializedName("checkTime")
     @Expose
     private ArrayList<String> checkTime; // when should the app check if your med has been taken?
@@ -64,10 +72,32 @@ public class Medicine {
     @Expose
     private Boolean taken; // this will be determined by fetching from the database. Default is false
 
+    @SerializedName("reminded")
+    @Expose
+    private int reminded;
+
+    @SerializedName("isNewMed")
+    @Expose
+    private Boolean isNewMed;
+
+    @SerializedName("stolen")
+    @Expose
+    private Boolean stolen;
+
+    @SerializedName("inOrOut")
+    @Expose
+    private Boolean inOut; // 1 = in, 0 = out
+
+    @SerializedName("lastTimeTaken")
+    @Expose
+    private String lastTimeTaken;
+
     public Medicine()
     {
         user_id = 1;
+        tag_id = 0;
         medName = new String("");
+        med_desc = new String("");
         checkTime = new ArrayList<>();
         medFreqPerTime = 0;
         medFreqInterval = 0;
@@ -79,11 +109,22 @@ public class Medicine {
         timesTaken = 0;
         taken = false;
         dosesLeft = 0;
+        reminded = 0;
+        isNewMed = false;
+        stolen = false;
+        inOut = false;
+        lastTimeTaken = new String("");
     }
 
     // getters and setters
     public int getUser_id() { return user_id; }
     public void setUser_id(int id) { user_id = id; }
+
+    public int getTag_id() {return tag_id;}
+    public void setTag_id(int id) {tag_id = id;}
+
+    public String getMed_desc() {return med_desc;}
+    public void setMed_desc(String desc) {med_desc = desc;}
 
     public String getMedName()
     {
@@ -214,6 +255,21 @@ public class Medicine {
     {
         dosesLeft = left;
     }
+
+    public Boolean getIsNewMed() { return isNewMed;}
+    public void setIsNewMed(Boolean isNew) { isNewMed = isNew;}
+
+    public Boolean getStolen() { return stolen;}
+    public void setStolen(Boolean stole) {stolen = stole;}
+
+    public Boolean getInOut() {return inOut;}
+    public void setInOut(Boolean inOrOut) { inOut = inOrOut;}
+
+    public String getLastTimeTaken() { return lastTimeTaken;}
+    public void setLastTimeTaken(String whenTaken) { lastTimeTaken = whenTaken;}
+
+    public int getReminded() { return reminded;}
+    public void setReminded(int howMany) { reminded = howMany;}
 
 
 
