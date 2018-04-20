@@ -30,7 +30,31 @@
         <activity
             android:name=".ViewSingleMedActivity">
         </activity>
-        <receiver android:name=".AlarmBroadcastReceiver" />
+
+        <activity
+            android:name=".EditMedicineActivity">
+        </activity>
+
+        <activity
+            android:name=".ListTimesActivity">
+        </activity>
+
+        <activity
+            android:name=".EditTimesActivity">
+        </activity>
+
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".MedFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

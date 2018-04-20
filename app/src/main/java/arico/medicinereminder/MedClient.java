@@ -1,3 +1,5 @@
+// Vanilla retrofit client class to interface with server.
+
 package arico.medicinereminder;
 
 /**
@@ -11,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MedClient {
 
-    public static final String BASE_URL = "http://10.212.81.49/med_reminder/";
+    public static final String BASE_URL = "http://10.226.80.191/med_reminder/";
     private static Retrofit retrofit = null;
 
 

@@ -1,7 +1,7 @@
-package arico.medicinereminder;
+// Model class for Medicine table of db.
+// Stores all information on a given medicine.
 
-import android.icu.util.Calendar;
-import android.icu.util.GregorianCalendar;
+package arico.medicinereminder;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -76,9 +76,9 @@ public class Medicine {
     @Expose
     private int reminded;
 
-    @SerializedName("isNewMed")
+    @SerializedName("newmed")
     @Expose
-    private Boolean isNewMed;
+    private boolean isNewMed;
 
     @SerializedName("stolen")
     @Expose
@@ -92,13 +92,18 @@ public class Medicine {
     @Expose
     private String lastTimeTaken;
 
+    @SerializedName("checkDates")
+    @Expose
+    private ArrayList<String> checkDates;
+
     public Medicine()
     {
         user_id = 1;
         tag_id = 0;
-        medName = new String("");
-        med_desc = new String("");
+        medName = "";
+        med_desc = "";
         checkTime = new ArrayList<>();
+        checkDates = new ArrayList<>();
         medFreqPerTime = 0;
         medFreqInterval = 0;
         dosage = 0;
@@ -256,8 +261,10 @@ public class Medicine {
         dosesLeft = left;
     }
 
-    public Boolean getIsNewMed() { return isNewMed;}
-    public void setIsNewMed(Boolean isNew) { isNewMed = isNew;}
+    public boolean getIsNewMed() { return isNewMed;}
+    public void setIsNewMed(boolean isNew) {
+        isNewMed = isNew;
+    }
 
     public Boolean getStolen() { return stolen;}
     public void setStolen(Boolean stole) {stolen = stole;}
@@ -270,6 +277,20 @@ public class Medicine {
 
     public int getReminded() { return reminded;}
     public void setReminded(int howMany) { reminded = howMany;}
+
+    public ArrayList<String> getCheckDates(){
+        return checkDates;
+    }
+
+    public void addCheckDate(String date)
+    {
+        checkDates.add(date);
+    }
+
+    public String getCheckDate(int index) // get a time based on index
+    {
+        return checkDates.get(index);
+    }
 
 
 

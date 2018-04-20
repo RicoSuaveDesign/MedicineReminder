@@ -1,3 +1,5 @@
+// Vanilla recycler adapter for recyclerview in MedListActivity
+
 package arico.medicinereminder;
 
 import android.content.Context;
@@ -19,9 +21,6 @@ import static java.security.AccessController.getContext;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>  {
 
-    /*public interface OnItemClickListener {
-        void onItemClick(Medicine med);
-    }*/
 
 
     // Provide a reference to the views for each data item
@@ -29,12 +28,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     // you provide access to all the views for a data item in a view holder
 
     private final ArrayList<Medicine> meds;
-    //private final OnItemClickListener listener;
-    Context mContext;
+    private Context mContext;
 
-    public RecyclerAdapter(ArrayList<Medicine> medics) {
+    public RecyclerAdapter(ArrayList<Medicine> medics, Context context) {
         this.meds = medics;
-        //this.listener = listen;
+        mContext = context;
 
     }
 
@@ -74,38 +72,52 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         public void bind(final Medicine med) {
 
-            med_name.setText(med.getMedName());
+            System.out.println(med.getIsNewMed());
 
-           // med_desc.setText(med.getMed_desc());
+            if(med.getIsNewMed())
+            {
+                System.out.println("New med detected");
+                Context context = mContext;
+                Intent intent = new Intent(context, NewMedicineActivity.class);
 
-            med_dosage.setText(String.valueOf(med.getDosage()));
-            med_dosage.append(" ");
-           // med_dosage.append(med.getDosageUnit());
+                intent.putExtra("tag_id", med.getTag_id());
+                context.startActivity(intent);
+            }
+            else {
+                // branching so can show vals that may be null in a new med
+                med_name.setText(med.getMedName());
 
-            doseunit.setText(String.valueOf(med.getTag_id()));
+                med_desc.setText(med.getMed_desc());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Context context = view.getContext();
-                    Intent intent = new Intent(context, ViewSingleMedActivity.class);
+                med_dosage.setText(String.valueOf(med.getDosage()));
+                med_dosage.append(" ");
+                med_dosage.append(med.getDosageUnit());
 
-                    // Put most of the medicine into the intent for display.
-                    intent.putExtra("is_new", med.getIsNewMed());
-                    intent.putExtra("tag_id", med.getTag_id());
-                    intent.putExtra("med_name", med.getMedName());
-                    intent.putExtra("med_desc", med.getMed_desc());
-                    intent.putExtra("how_often", med.getMedFreqPerTime());
-                    intent.putExtra("interval", med.getMedFreqInterval());
-                    intent.putExtra("dosage", med.getDosage());
-                    intent.putExtra("unit", med.getDosageUnit());
-                    intent.putExtra("doses_left", med.getDosesLeft());
-                    intent.putExtra("in_or_out", med.getInOut());
-                    intent.putExtra("lastTaken", med.getLastTimeTaken());
+                doseunit.setText(String.valueOf(med.getTag_id()));
 
-                    context.startActivity(intent);
-                }
-            });
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, ViewSingleMedActivity.class);
+
+                        // Put most of the medicine into the intent for display.
+                        intent.putExtra("is_new", med.getIsNewMed());
+                        intent.putExtra("tag_id", med.getTag_id());
+                        intent.putExtra("med_name", med.getMedName());
+                        intent.putExtra("med_desc", med.getMed_desc());
+                        intent.putExtra("how_often", med.getMedFreqPerTime());
+                        intent.putExtra("interval", med.getMedFreqInterval());
+                        intent.putExtra("dosage", med.getDosage());
+                        intent.putExtra("unit", med.getDosageUnit());
+                        intent.putExtra("doses_left", med.getDosesLeft());
+                        intent.putExtra("in_or_out", med.getInOut());
+                        intent.putExtra("lastTaken", med.getLastTimeTaken());
+
+                        context.startActivity(intent);
+                    }
+                });
+            }
 
         }
     }

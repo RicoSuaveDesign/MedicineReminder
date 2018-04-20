@@ -1,3 +1,5 @@
+// Vanilla retrofit interface class. Routes to different php pages on the server to interact with db.
+
 package arico.medicinereminder;
 
 /**
@@ -17,9 +19,24 @@ public interface MedInterface {
     @GET("get_all_medicines.php")
     Call<MedResponse> getAllMedicines(@Query("uid") int user_id);
 
-    @GET("get_medicine_details.php")
-    Call<Medicine> getMedicineDetails(@Query("med_id") int id);
+    @GET("get_medicine_times.php")
+    Call<checkTimeResult> getMedicineDetails(@Query("mid") int id);
 
+    @FormUrlEncoded
+    @POST("delete_medicine.php")
+    Call<Medicine> deleteMedicine(@Field("mid") int id);
+
+    @FormUrlEncoded
+    @POST("update_user.php")
+    Call<Medicine> updateUser(@Field("token") String token);
+
+    @FormUrlEncoded
+    @POST("edit_time.php")
+    Call<CheckTime> updateTime(@Field("timeid") int id, @Field("checktime") String checktime, @Field("checkdate") String checkdate);
+
+    @FormUrlEncoded
+    @POST("delete_time.php")
+    Call<CheckTime> deleteTime(@Field("timeid") int id);
 
     //@FormUrlEncoded
     @POST("create_medicine.php")

@@ -1,3 +1,5 @@
+// Model class to receive multiple medicines.
+
 package arico.medicinereminder;
 
 /**
@@ -21,8 +23,6 @@ public class MedResponse {
         private List<Medicine> results;
         @SerializedName("total_results")
         private int totalResults;
-        @SerializedName("total_pages")
-        private int totalPages;
 
         public int getPage() {
             return page;

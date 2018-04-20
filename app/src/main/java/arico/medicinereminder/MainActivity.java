@@ -1,73 +1,85 @@
+// Right now this is honestly just an entry point for the app.
+// Will probably put instructions on this activity.
+// Will be able to view all medicines as well as allergy info.
+
 package arico.medicinereminder;
 
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlarmManager;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static android.content.ContentValues.TAG;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    Button medButton, cancelButton, goToNewMedButton, viewMedsButton;
-    PendingIntent pendingIntent;
-    AlarmManager alarmManager;
-    Intent intent;
+    Button viewMedsButton;
+    TextView tvtoken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        medButton = (Button) findViewById(R.id.medButton);
-        cancelButton = (Button) findViewById(R.id.cancelButton);
-        goToNewMedButton = (Button) findViewById(R.id.goToNewMed);
-        viewMedsButton = (Button) findViewById(R.id.viewMeds);
-        medButton.setOnClickListener(this);
-        viewMedsButton.setOnClickListener(this);
-        cancelButton.setOnClickListener(this);
-        goToNewMedButton.setOnClickListener(this);
-    }
 
-    public void startAlert(View v){
-        intent = new Intent(this, AlarmBroadcastReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(
-                this.getApplicationContext(), 280192, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, 1000, pendingIntent);
+
+        viewMedsButton = (Button) findViewById(R.id.viewMeds);
+        viewMedsButton.setOnClickListener(this);
+
+        Context ctx = this.getApplicationContext();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        String token = preferences.getString("token", "no token");
+
+        if (token != null) {
+            //displaying the token
+            MedInterface medfetch = MedClient.getClient().create(MedInterface.class);
+
+            Call<Medicine> call = medfetch.updateUser(token);
+            call.enqueue(new Callback<Medicine>() {
+                @Override
+                public void onResponse(Call<Medicine>call, Response<Medicine> response) {
+
+                    //times = new ArrayList<>();
+
+                }
+
+                @Override
+                public void onFailure(Call<Medicine>call, Throwable t) {
+                    // Log error here since request failed
+                    Log.e(TAG, t.toString());
+                }
+            });
+            System.out.println(token);
+        } else {
+            //if token is null that means something wrong
+            tvtoken.setText("Token not generated");
+        }
+
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.medButton) {
-            startAlert(v);
-        }
-        else if(v.getId() == R.id.goToNewMed){
-            launchNewMedsActivity();
-        }
-        else if(v.getId() == R.id.viewMeds){
+        if(v.getId() == R.id.viewMeds){
             launchViewMedsActivity();
         }
-        else {
-            if (alarmManager != null){
-
-                alarmManager.cancel(pendingIntent);
-                Toast.makeText(this, "Alarm Disabled !!",Toast.LENGTH_LONG).show();
-
-            }
-
-        }
-    }
-
-    private void launchNewMedsActivity() {
-
-        Intent intent = new Intent(this, NewMedicineActivity.class);
-        startActivity(intent);
     }
 
     private void launchViewMedsActivity() {
@@ -77,15 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (alarmManager != null) {
-            alarmManager.cancel(pendingIntent);
-        }
-
-
-    }
 
 
 }

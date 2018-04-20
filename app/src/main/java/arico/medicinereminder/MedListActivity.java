@@ -1,13 +1,19 @@
+// Lists out every medicine registered to a user.
+// Queries database for full medicine, but only displays name, dosage, and purpose.
+
 package arico.medicinereminder;
 
 import java.util.ArrayList;
 
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 
 
 import retrofit2.Call;
@@ -24,6 +30,9 @@ public class MedListActivity extends Activity {
     private RecyclerView recyclerView;
     private ArrayList<Medicine> medicines;
     private RecyclerAdapter adapter;
+    private Context context;
+
+    private TextView nomed;
 
 
 
@@ -32,6 +41,8 @@ public class MedListActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medlist);
+        nomed = (TextView) findViewById(R.id.nomed);
+        context = this.getApplicationContext();
         initViews();
     }
 
@@ -55,8 +66,13 @@ public class MedListActivity extends Activity {
                 Log.d(TAG, "Number of medicines received: " + medicines.size());
                 Log.d(TAG, "med name: " + medicines.get(0).getMedName());
 
-                adapter = new RecyclerAdapter(medicines);
-                recyclerView.setAdapter(adapter);
+                if(medicines.size() > 0) {
+                    adapter = new RecyclerAdapter(medicines, context);
+                    recyclerView.setAdapter(adapter);
+                }
+                else{
+                    nomed.setText("No medicines yet. Try scanning an RFID tag.");
+                }
 
 
             }
@@ -68,6 +84,13 @@ public class MedListActivity extends Activity {
             }
         });
 
+    }
+
+    @Override
+    public void onBackPressed(){
+        // it's bad to press back and be able to see stuff thats been deleted or input so lets just go back to main activity
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
     }
 
 }
