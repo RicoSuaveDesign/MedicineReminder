@@ -118,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void getAllergy(){
         String lockey = lc.getLocationKey();
+        System.out.print("The next line is the locationkey in Main");
+        System.out.println(lockey);
         AccuInterface aui = AccuClient.getClient().create(AccuInterface.class);
 
         Call<Weather> call = aui.getPollutants(lockey, "kJg45AjDEXOIksWs8ZcS8nab7kVGU0Or", true);
@@ -125,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<Weather>call, Response<Weather> response) {
 
-                
+
                 ArrayList<AirAndPollen> allergies = new ArrayList<>(response.body().getDailyForecasts().get(0).getAirAndPollen());
                 String aqString = "";
                 aqString += "Air quality is ";
@@ -148,6 +150,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume(){
         super.onResume();
+       
         getAllergy();
     }
 

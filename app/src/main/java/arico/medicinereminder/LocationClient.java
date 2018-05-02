@@ -78,8 +78,16 @@ public class LocationClient implements GoogleApiClient.ConnectionCallbacks,
     @Override
     public void onLocationChanged(Location location) {
 
+        System.out.println("On Location Changed");
+
+        createLocationRequest();
+
         this.lat = location.getLatitude();
         this.longi = location.getLongitude();
+
+        System.out.println(this.lat);
+        System.out.println(this.longi);
+
         displayLocation();
 
     }
@@ -184,6 +192,7 @@ public class LocationClient implements GoogleApiClient.ConnectionCallbacks,
                 String lock = response.body().getLocKey();
                 System.out.println("The next line is the key: ");
                 System.out.println(lock);
+                locationKey = lock;
 
             }
 
