@@ -4,6 +4,8 @@ package arico.medicinereminder;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,7 +26,7 @@ import static android.content.ContentValues.TAG;
  * Created by starb on 4/6/2018.
  */
 
-public class EditMedicineActivity extends Activity {
+public class EditMedicineActivity extends Activity implements DatePickerFragment.onDateSelectedListener{
 
     private Medicine thisMed; // the medicine we are editing
 
@@ -41,7 +43,7 @@ public class EditMedicineActivity extends Activity {
 
     Spinner freq;
 
-    Button done;
+    Button done, addTime;
 
     MedInterface medfetch;
 
@@ -73,10 +75,10 @@ public class EditMedicineActivity extends Activity {
             tagid.setText(theid);
 
             medName.setText(extras.getString("med_name"));
-            dosage.setText(String.valueOf(extras.getInt("dose")));
+            dosage.setText(String.valueOf(extras.getFloat("dose")));
             expiration.setText(extras.getString("expiration"));
-            doseUnit.setText(extras.getString("dose_unit"));
-            //medFreqNum.setText(String.valueOf(extras.getLong("MedFreqNum")));
+            doseUnit.setText(extras.getString("unit"));
+            medFreqNum.setText(String.valueOf(extras.getInt("freq")));
             howManyDoses.setText(String.valueOf(extras.getInt("dosesLeft")));
             purpose.setText(extras.getString("purpose"));
 
@@ -91,6 +93,7 @@ public class EditMedicineActivity extends Activity {
 
 
         done = (Button) findViewById(R.id.submitButton);
+        addTime = (Button) findViewById(R.id.addcheck);
 
         expiration.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +101,18 @@ public class EditMedicineActivity extends Activity {
                 FragmentManager fm = getFragmentManager();
                 DatePickerFragment dpf = new DatePickerFragment();
                 dpf.show(fm, "Date Picker");
+
+            }
+        });
+
+        addTime.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+
+                Context context = view.getContext();
+                Intent intent = new Intent(context, AddNewTimeActivity.class);
+                intent.putExtra("tagid", realid);
+                context.startActivity(intent);
 
             }
         });
@@ -159,9 +174,37 @@ public class EditMedicineActivity extends Activity {
                         }
                     });
                 }
+                Context context = view.getContext();
+                Intent intent = new Intent(context, MedListActivity.class);
+                context.startActivity(intent);
             }
 
         });
+    }
+
+    @Override
+    public void onDateSelected(int year, int month, int day)
+    {
+        System.out.println(day);
+        System.out.println(month);
+        System.out.println(year);
+
+       /* GregorianCalendar date = new GregorianCalendar();
+        date.set(year, month, day);
+        newMed.setExpirationDate(date);*/
+        String date = "";
+        date += year + "-";
+        if(month > 8) {
+            date += (month + 1) + "-";
+        }
+        else{
+            date += "0" + (month+1) + "-";
+        }
+        date += day;
+        thisMed.setExpirationDate(date);
+
+        // fills out exp date box so user sees their input
+        expiration.setText((month + 1) + "/" + day + "/" + year);
     }
 
 

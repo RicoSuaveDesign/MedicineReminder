@@ -29,12 +29,15 @@ import static android.content.ContentValues.TAG;
 
 public class ViewSingleMedActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView med_name, purpose, instructions, inout, tagid, dosesleft, expiration;
+    TextView med_name, purpose, instructions, inout, tagid, dosesleft, expiration, lastout;
     Button editButton, deleteButton, editTimesButton;
     private ArrayList<CheckTime> times;
     float dosing;
     String unit;
     long interv;
+    int freq;
+    int doses;
+    String exp;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +50,7 @@ public class ViewSingleMedActivity extends AppCompatActivity implements View.OnC
         tagid = (TextView) findViewById(R.id.tagid);
         dosesleft = (TextView) findViewById(R.id.dosesLeft);
         expiration = (TextView) findViewById(R.id.expiration);
+        lastout = (TextView) findViewById(R.id.lasttaken);
 
         editButton = (Button) findViewById(R.id.editMedButton);
         editTimesButton = (Button) findViewById(R.id.viewTimes);
@@ -69,11 +73,18 @@ public class ViewSingleMedActivity extends AppCompatActivity implements View.OnC
             String instruct = "Take ";
             dosing = extras.getFloat("dosage");
             instruct += dosing;
+            instruct += " ";
 
-            unit =extras.getString("unit");
+            unit = extras.getString("unit");
             instruct += unit;
 
             interv = extras.getLong("interval");
+            instruct += " ";
+            freq = extras.getInt("freq");
+            instruct += freq;
+            instruct += " times ";
+
+
 
             long inter = interv;
             if(inter == 86400000)
@@ -98,8 +109,12 @@ public class ViewSingleMedActivity extends AppCompatActivity implements View.OnC
 
             med_name.setText(extras.getString("med_name"));
             purpose.setText(extras.getString("med_desc"));
-            dosesleft.setText(String.valueOf(extras.getInt("doses_left")));
-            expiration.setText(extras.getString("expiration"));
+            doses = extras.getInt("doses_left");
+            dosesleft.append(String.valueOf(doses));
+            exp = extras.getString("expiration");
+            expiration.append(exp);
+            lastout.append(extras.getString("lastTaken"));
+
 
             int thetag = extras.getInt("tag_id");
             tagid.setText(String.valueOf(thetag));
@@ -152,8 +167,9 @@ public class ViewSingleMedActivity extends AppCompatActivity implements View.OnC
             intent.putExtra("dose", dosing);
             intent.putExtra("unit", unit);
             intent.putExtra("interval", interv);
-            intent.putExtra("dosesLeft", Integer.parseInt(dosesleft.getText().toString())); // lets be consistent and always pass as int
-            intent.putExtra("expiration", expiration.getText().toString());
+            intent.putExtra("dosesLeft", doses); // lets be consistent and always pass as int
+            intent.putExtra("expiration", exp);
+            intent.putExtra("freq", freq);
 
             context.startActivity(intent);
 

@@ -62,15 +62,15 @@ public class MedListActivity extends Activity {
             @Override
             public void onResponse(Call<MedResponse>call, Response<MedResponse> response) {
 
+                try{
                 medicines = new ArrayList<>(response.body().getResults());
                 Log.d(TAG, "Number of medicines received: " + medicines.size());
                 Log.d(TAG, "med name: " + medicines.get(0).getMedName());
-
-                if(medicines.size() > 0) {
                     adapter = new RecyclerAdapter(medicines, context);
                     recyclerView.setAdapter(adapter);
                 }
-                else{
+                catch(java.lang.NullPointerException e){
+
                     nomed.setText("No medicines yet. Try scanning an RFID tag.");
                 }
 

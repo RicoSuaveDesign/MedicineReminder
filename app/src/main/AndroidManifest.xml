@@ -46,6 +46,10 @@
             android:name=".EditTimesActivity">
         </activity>
 
+        <activity
+            android:name=".AddNewTimeActivity">
+        </activity>
+
         <service
             android:name=".MyFirebaseInstanceIDService">
             <intent-filter>

@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Context ctx;
 
     LocationClient lc;
+    boolean toomany;
+    boolean testing = true; // so i dont run out of api calls
 
 
     @Override
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mold = (TextView) findViewById(R.id.mold);
         ragweed = (TextView) findViewById(R.id.ragweed);
         pollen = (TextView) findViewById(R.id.tree);
+
+        toomany = false;
 
 
 
@@ -94,24 +98,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             });
             System.out.println(token);
         }
+        if(!testing) {
+            if (checkPlayServices()) {
+                if (checkInetPerm()) {
+                    if (lc == null) {
+                        lc = new LocationClient(ctx); // if we already enabled the permission then it will never fire
+                    }
+                }
 
-        if(checkPlayServices()){
-            if(checkInetPerm())
-            {
-                if(lc == null){
-                lc = new LocationClient(ctx); // if we already enabled the permission then it will never fire
-                     }
+
             }
 
+            if (lc != null) {
+                getAllergy();
 
-        }
-
-        if(lc != null){
-            getAllergy();
-
-        }
-        else{
-            System.out.println("No location key, no forecast");
+            } else {
+                System.out.println("No location key, no forecast");
+            }
         }
 
     }
@@ -128,6 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<Weather>call, Response<Weather> response) {
 
 
+                try{
                 ArrayList<AirAndPollen> allergies = new ArrayList<>(response.body().getDailyForecasts().get(0).getAirAndPollen());
                 String aqString = "";
                 aqString += "Air quality is ";
@@ -137,6 +141,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mold.setText(createAllergyString(allergies.get(2)));
                 ragweed.setText(createAllergyString(allergies.get(3)));
                 pollen.setText(createAllergyString(allergies.get(4)));
+                }
+                catch(java.lang.NullPointerException e){
+
+                    airquality.setText("Allergy information not available; tested too hard with the free plan");
+                    toomany = true;
+
+                }
             }
 
             @Override
@@ -150,8 +161,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume(){
         super.onResume();
-       
+
+        if(!testing)
+        {
         getAllergy();
+        }
     }
 
     public String createAllergyString(AirAndPollen aller){

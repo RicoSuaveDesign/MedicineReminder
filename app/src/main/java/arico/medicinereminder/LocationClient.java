@@ -189,10 +189,14 @@ public class LocationClient implements GoogleApiClient.ConnectionCallbacks,
             @Override
             public void onResponse(Call<accuLocation>call, Response<accuLocation> response) {
 
+                try{
                 String lock = response.body().getLocKey();
                 System.out.println("The next line is the key: ");
                 System.out.println(lock);
-                locationKey = lock;
+                locationKey = lock;}
+                catch(java.lang.NullPointerException e){
+                    locationKey = "0";
+                }
 
             }
 

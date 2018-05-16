@@ -68,6 +68,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             med_dosage = (TextView) view.findViewById(R.id.med_dose);
             doseunit = (TextView) view.findViewById(R.id.dose_unit);
 
+
+
         }
 
         public void bind(final Medicine med) {
@@ -92,6 +94,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 med_dosage.setText(String.valueOf(med.getDosage()));
                 med_dosage.append(" ");
                 med_dosage.append(med.getDosageUnit());
+                med_dosage.append(" ");
 
                 doseunit.setText(String.valueOf(med.getTag_id()));
 
@@ -113,6 +116,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         intent.putExtra("doses_left", med.getDosesLeft());
                         intent.putExtra("in_or_out", med.getInOut());
                         intent.putExtra("lastTaken", med.getLastTimeTaken());
+                        intent.putExtra("expiration", med.getExpirationDate());
+                        intent.putExtra("freq", med.getMedFreqPerTime());
 
                         context.startActivity(intent);
                     }

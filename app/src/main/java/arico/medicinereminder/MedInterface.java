@@ -35,6 +35,10 @@ public interface MedInterface {
     Call<CheckTime> updateTime(@Field("timeid") int id, @Field("checktime") String checktime, @Field("checkdate") String checkdate);
 
     @FormUrlEncoded
+    @POST("add_time.php")
+    Call<CheckTime> addTime(@Field("mid") int id, @Field("checktime") String checktime, @Field("checkdate") String checkdate);
+
+    @FormUrlEncoded
     @POST("delete_time.php")
     Call<CheckTime> deleteTime(@Field("timeid") int id);
 

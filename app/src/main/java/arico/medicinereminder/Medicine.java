@@ -88,7 +88,7 @@ public class Medicine {
     @Expose
     private Boolean inOut; // 1 = in, 0 = out
 
-    @SerializedName("lastTimeTaken")
+    @SerializedName("lastout")
     @Expose
     private String lastTimeTaken;
 
